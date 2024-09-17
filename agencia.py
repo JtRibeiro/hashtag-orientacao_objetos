@@ -1,4 +1,5 @@
 import locale
+from random import  randint
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 class Agencia:
@@ -12,7 +13,7 @@ class Agencia:
 
     def verificar_caixa(self):
         if self.caixa < 1000000:
-            print("O valor do caixa está ok. Caixa Atual: {}".format(locale.currency(self.caixa, grouping=True)))
+            print("Caixa abaixo do nível recomentado. Caixa Atual: {}".format(locale.currency(self.caixa, grouping=True)))
         else:
             print("O valor do caixa esta ok. Caixa Atual: {}".format(locale.currency(self.caixa, grouping=True)))
 
@@ -27,12 +28,32 @@ class Agencia:
         self.clientes.append((nome, cpf, patrimonio))
 
 
+class AgenciaVirtual(Agencia):
+    def __init__(self, site, telefone, cnpj):
+        self.site = site
+        super().__init__(telefone, cnpj, 1000)
+        self.caixa = 1000000
+
+class AgengiaComum(Agencia):
+
+    def __init__(self, telefone, cnpj):
+        super().__init__(telefone, cnpj, numero=randint(1001, 9999))
+        self.caixa = 1000000
+
+class AgenciaPremium(Agencia):
+    def __init__(self, telefone, cnpj):
+        super().__init__(telefone, cnpj, numero=randint(1001, 9999))
+        self.caixa = 15000000
+
+
 agencia1 = Agencia(31975081605, 1230123485, 4356)
-agencia1.caixa = 1000000
-agencia1.verificar_caixa()
 
-agencia1.emprestar_dinheiro(2500, 88571231002, 0.02)
-print(agencia1.emprestimos)
+agencia_virtual = AgenciaVirtual("www.agenciavirtua.com",112351500, 4533)
+agencia_virtual.verificar_caixa()
+print(agencia_virtual.site)
 
-agencia1.adicionar_cliente("Torezone", 11352600152, 15000)
-print(agencia1.clientes)
+agencia_comum = AgengiaComum(32851530, 112351531000113)
+agencia_comum.verificar_caixa()
+
+agencia_premium = AgenciaPremium(33850350, 3331110000115)
+agencia_premium.verificar_caixa()
